@@ -5,8 +5,7 @@ import time
 import os
 import subprocess
 
-# solverProcess = subprocess.run(["./solver.exe"], capture_output=True)
-
+solverProcess = ""
 
 
 def main():
@@ -31,7 +30,9 @@ def main():
             if size > board[posy][posx]:
                 board[posy][posx] = size
         print(board)
-
+        solverProcess = subprocess.run(["./solver_2048.exe"],
+                                       input="".join("".join(str(num) + " " for num in line) + "\n" for line in board),
+                                       encoding="utf-8")
         previous_res = res
 
 
