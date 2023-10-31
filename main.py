@@ -2,6 +2,11 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 import time
+import os
+import subprocess
+
+# solverProcess = subprocess.run(["./solver.exe"], capture_output=True)
+
 
 
 def main():
@@ -10,7 +15,6 @@ def main():
     browser.get(url)
     time.sleep(10)
     board = [[0 for _ in range(4)] for _ in range(4)]
-    board_previous = [row[:] for row in board]
     previous_res = ""
     bodyElement = browser.find_element(By.TAG_NAME, "body")
     while True:
@@ -39,12 +43,9 @@ def remove_ads(browser: webdriver):
             var elems = document.getElementsByTagName("iframe");
             for(var i = 0, max = elems.length; i < max; i++)
                  {
-                     elems[i].parentNode.removeChild(elems[i]);
+                     elems[i].hidden = true;
                  }
                               """)
-        print('Total Ads: ' + str(len(all_iframes)))
-    else:
-        print('No frames found')
 
 
 if __name__ == "__main__":
