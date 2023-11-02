@@ -5,8 +5,6 @@ import time
 import os
 import subprocess
 
-solverProcess = ""
-
 
 def main():
     url = "https://play2048.co/"
@@ -18,7 +16,7 @@ def main():
     bodyElement = browser.find_element(By.TAG_NAME, "body")
     while True:
         board = [[0 for _ in range(4)] for _ in range(4)]
-        soup = BeautifulSoup(browser.page_source, features="lxml")
+        soup = BeautifulSoup(browser.page_source)
         res = soup.find('div', {'class': 'tile-container'})
         if previous_res == res:
             continue
@@ -32,7 +30,11 @@ def main():
         print(board)
         solverProcess = subprocess.run(["./solver_2048.exe"],
                                        input="".join("".join(str(num) + " " for num in line) + "\n" for line in board),
-                                       encoding="utf-8")
+                                       encoding="utf-8",
+                                       capture_output=True
+                                       )
+        bodyElement.send_keys(solverProcess.stdout)
+        time.sleep(0.5)
         previous_res = res
 
 
