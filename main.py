@@ -12,6 +12,7 @@ def main():
     browser.get(url)
     time.sleep(10)
     board = [[0 for _ in range(4)] for _ in range(4)]
+    previous_board = [row[:] for row in board]
     previous_res = ""
     bodyElement = browser.find_element(By.TAG_NAME, "body")
     while True:
@@ -27,6 +28,8 @@ def main():
             size = int(info[1][info[1].find('-')+1:])
             if size > board[posy][posx]:
                 board[posy][posx] = size
+        if board == previous_board:
+            continue
         print(board)
         solverProcess = subprocess.run(["./solver_2048.exe"],
                                        input="".join("".join(str(num) + " " for num in line) + "\n" for line in board),
@@ -36,6 +39,7 @@ def main():
         bodyElement.send_keys(solverProcess.stdout)
         time.sleep(0.5)
         previous_res = res
+        previous_board = [row[:] for row in board]
 
 
 def remove_ads(browser: webdriver):
